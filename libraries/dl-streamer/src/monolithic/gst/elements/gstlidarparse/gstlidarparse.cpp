@@ -73,7 +73,7 @@ static void gst_lidar_parse_class_init(GstLidarParseClass *klass) {
 
     g_object_class_install_property(gobject_class, PROP_STRIDE,
         g_param_spec_int("stride", "Stride",
-                        "Specifies the interval of frames to process. 1 means every frame is processed, 2 means every second frame is processed.",
+                        "Specifies the interval of frames to process, controls processing granularity. 1 means every frame is processed, 2 means every second frame is processed.",
                         1, G_MAXINT, 1,
                         (GParamFlags)(G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
 
@@ -296,6 +296,7 @@ static GstFlowReturn gst_lidar_parse_transform(GstBaseTransform *trans, GstBuffe
     filter->current_index++;
 
     size_t num_floats = 0;
+    size_t point_count = 0;
     std::vector<float> float_data;
 
     if (filter->file_type == FILE_TYPE_BIN) {
@@ -316,6 +317,7 @@ static GstFlowReturn gst_lidar_parse_transform(GstBaseTransform *trans, GstBuffe
         }
 
         num_floats = in_map.size / sizeof(float);
+        point_count = num_floats / 4;
         const float *data = reinterpret_cast<const float *>(in_map.data);
         float_data.assign(data, data + num_floats);
         gst_buffer_unmap(inbuf, &in_map);
@@ -332,21 +334,21 @@ static GstFlowReturn gst_lidar_parse_transform(GstBaseTransform *trans, GstBuffe
         return GST_FLOW_ERROR;
     }
 
-    LidarMeta *lidar_meta = add_lidar_meta(outbuf, num_floats, float_data);
+    LidarMeta *lidar_meta = add_lidar_meta(outbuf, point_count, float_data);
     if (!lidar_meta) {
         GST_ERROR_OBJECT(filter, "Failed to add lidar meta to buffer");
         g_mutex_unlock(&filter->mutex);
         return GST_FLOW_ERROR;
     }
 
-    // Debug dump: print float_count and first few floats
+    // Debug dump: print lidar_point_count and first few floats
     GstMapInfo out_map;
     if (gst_buffer_map(outbuf, &out_map, GST_MAP_READ)) {
         const float *f = reinterpret_cast<const float *>(out_map.data);
         gsize n = out_map.size / sizeof(float);
         gsize dump = MIN(n, 5); 
         std::ostringstream oss;
-        oss << "float_count=" << lidar_meta->float_count << " dump(" << dump << "/" << n << "): ";
+        oss << "lidar_point_count=" << lidar_meta->lidar_point_count << " dump(" << dump << "/" << n << "): ";
         for (gsize i = 0; i < dump; ++i) {
             oss << std::fixed << std::setprecision(6) << f[i] << " ";
         }
@@ -356,7 +358,7 @@ static GstFlowReturn gst_lidar_parse_transform(GstBaseTransform *trans, GstBuffe
         GST_WARNING_OBJECT(filter, "Failed to map outbuf for dump");
     }
 
-    GST_INFO_OBJECT(filter, "Successfully processed lidar buffer with %u floats", lidar_meta->float_count);
+    GST_INFO_OBJECT(filter, "Successfully processed lidar buffer with %u floats", lidar_meta->lidar_point_count);
 
     g_mutex_unlock(&filter->mutex);
 

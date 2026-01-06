@@ -4,7 +4,7 @@
 #include <new>
 
 GType lidar_meta_api_get_type(void) {
-    static GType type = 0; // Removed volatile modifier
+    static GType type = 0;
     static const gchar *tags[] = { "lidar", NULL };
 
     if (g_once_init_enter(&type)) {
@@ -16,15 +16,14 @@ GType lidar_meta_api_get_type(void) {
 
 static gboolean lidar_meta_init(GstMeta *meta, gpointer params, GstBuffer *buffer) {
     LidarMeta *lidar_meta = (LidarMeta *)meta;
-    /* Placement-new to construct the std::vector inside the GstMeta slab. */
-    new (&lidar_meta->float_data) std::vector<float>();
-    lidar_meta->float_count = 0;
+    new (&lidar_meta->lidar_data) std::vector<float>();
+    lidar_meta->lidar_point_count = 0;
     return TRUE;
 }
 
 static void lidar_meta_free(GstMeta *meta, GstBuffer *buffer) {
     LidarMeta *lidar_meta = (LidarMeta *)meta;
-    lidar_meta->float_data.~vector();
+    lidar_meta->lidar_data.~vector();
 }
 
 const GstMetaInfo *lidar_meta_get_info(void) {
@@ -44,13 +43,13 @@ const GstMetaInfo *lidar_meta_get_info(void) {
     return meta_info;
 }
 
-LidarMeta *add_lidar_meta(GstBuffer *buffer, guint float_count, const std::vector<float> &float_data) {
+LidarMeta *add_lidar_meta(GstBuffer *buffer, guint lidar_point_count, const std::vector<float> &lidar_data) {
     if (!buffer) {
         GST_WARNING("Cannot add meta to NULL buffer");
         return nullptr;
     }
 
-    GST_DEBUG("Adding LidarMeta to buffer with float_count=%u", float_count);
+    GST_DEBUG("Adding LidarMeta to buffer with lidar_point_count=%u", lidar_point_count);
 
     LidarMeta *meta = (LidarMeta *)gst_buffer_add_meta(buffer, LIDAR_META_INFO, NULL);
     if (!meta) {
@@ -58,11 +57,11 @@ LidarMeta *add_lidar_meta(GstBuffer *buffer, guint float_count, const std::vecto
         return nullptr;
     }
 
-    meta->float_count = float_count;
-    meta->float_data = float_data;
+    meta->lidar_point_count = lidar_point_count;
+    meta->lidar_data = lidar_data;
 
-    GST_DEBUG("LidarMeta added successfully: float_count=%u, float_data_size=%zu", 
-              meta->float_count, meta->float_data.size());
+    GST_DEBUG("LidarMeta added successfully: lidar_point_count=%u, lidar_data_size=%zu", 
+              meta->lidar_point_count, meta->lidar_data.size());
 
     return meta;
 }
