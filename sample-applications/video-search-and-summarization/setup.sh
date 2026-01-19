@@ -186,7 +186,7 @@ export PM_CAPTIONING_MAX_COMPLETION_TOKENS=1024
 export PM_LLM_MAX_CONTEXT_LENGTH=${PM_LLM_MAX_CONTEXT_LENGTH:-90000}
 export PM_LLM_CONCURRENT=2
 export PM_VLM_CONCURRENT=4
-export PM_MULTI_FRAME_COUNT=12
+export PM_MULTI_FRAME_COUNT=${PM_MULTI_FRAME_COUNT:-12}
 export PM_MINIO_BUCKET=video-summary
 
 # env for ovms-service
@@ -747,7 +747,7 @@ if [ "$1" = "--summary" ] || [ "$1" = "--all" ]; then
         export PM_VLM_CONCURRENT=1
         export PM_LLM_CONCURRENT=1
         export VLM_COMPRESSION_WEIGHT_FORMAT=int4
-        export PM_MULTI_FRAME_COUNT=6
+        export PM_MULTI_FRAME_COUNT=${PM_MULTI_FRAME_COUNT:-6}
         export WORKERS=1        
         echo -e "[vlm-openvino-serving] ${BLUE}Using VLM for summarization on GPU${NC}"
     else
