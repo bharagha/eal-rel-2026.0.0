@@ -4,6 +4,8 @@ export const GVA_TRACKING_TYPES = [
   "zero-term-imageless",
 ] as const;
 
+export type GvaTrackingType = (typeof GVA_TRACKING_TYPES)[number];
+
 export const gvaTrackConfig = {
   editableProperties: [
     {

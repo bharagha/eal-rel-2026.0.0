@@ -1,37 +1,46 @@
-import Decodebin3Node from "./Decodebin3Node.tsx";
-import FakeSinkNode from "./FakeSinkNode.tsx";
-import FileSinkNode from "./FileSinkNode.tsx";
-import FileSrcNode from "./FileSrcNode.tsx";
-import GVAClassifyNode, { GVAClassifyNodeWidth } from "./GVAClassifyNode.tsx";
-import GVADetectNode, { GVADetectNodeWidth } from "./GVADetectNode.tsx";
-import GVAFpsCounterNode, {
-  GVAFpsCounterNodeWidth,
-} from "./GVAFpsCounterNode.tsx";
-import GVAMetaConvertNode, {
-  GVAMetaConvertNodeWidth,
-} from "./GVAMetaConvertNode.tsx";
-import GVAMetaPublishNode, {
-  GVAMetaPublishNodeWidth,
-} from "./GVAMetaPublishNode.tsx";
-import GVATrackNode from "./GVATrackNode.tsx";
-import GVAWatermarkNode, {
-  GVAWatermarkNodeWidth,
-} from "./GVAWatermarkNode.tsx";
-import H264ParseNode from "./H264ParseNode.tsx";
-import Mp4MuxNode from "./Mp4MuxNode.tsx";
-import QtdemuxNode from "./QtdemuxNode.tsx";
-import Queue2Node from "./Queue2Node.tsx";
-import QueueNode from "./QueueNode.tsx";
-import SplitmuxsinkNode from "./SplitmuxsinkNode.tsx";
-import TeeNode from "./TeeNode.tsx";
-import VaapiDecodebinNode from "./VaapiDecodebinNode.tsx";
-import VAH264DecNode from "./VAH264DecNode.tsx";
-import VAH264EncNode from "./VAH264EncNode.tsx";
-import VAPostProcNode from "./VAPostProcNode.tsx";
-import VideoScaleNode from "./VideoScaleNode.tsx";
-import VideoXRawNode from "./VideoXRawNode.tsx";
-import VideoXRawWithDimensionsNode from "./VideoXRawWithDimensionsNode.tsx";
-import AvDecH264Node from "./AvDecH264Node.tsx";
+import {
+  FileSrcNode,
+  QtdemuxNode,
+  H264ParseNode,
+  VAH264DecNode,
+  AvDecH264Node,
+  GVAFpsCounterNode,
+  GVADetectNode,
+  Queue2Node,
+  GVATrackNode,
+  GVAWatermarkNode,
+  GVAMetaConvertNode,
+  GVAMetaPublishNode,
+  FakeSinkNode,
+  VideoXRawNode,
+  VAPostProcNode,
+  VideoXRawWithDimensionsNode,
+  Mp4MuxNode,
+  FileSinkNode,
+  VAH264EncNode,
+  Decodebin3Node,
+  QueueNode,
+  GVAClassifyNode,
+  VaapiDecodebinNode,
+  TeeNode,
+  SplitmuxsinkNode,
+  VideoScaleNode,
+} from "./nodes";
+
+// ============================================================================
+// NODE WIDTH CONSTANTS
+// ============================================================================
+
+export const GVAFpsCounterNodeWidth = 250;
+export const GVADetectNodeWidth = 250;
+export const GVAClassifyNodeWidth = 242;
+export const GVAWatermarkNodeWidth = 243;
+export const GVAMetaConvertNodeWidth = 273;
+export const GVAMetaPublishNodeWidth = 268;
+
+// ============================================================================
+// NODE TYPE REGISTRY
+// ============================================================================
 
 export const nodeTypes = {
   filesrc: FileSrcNode,
