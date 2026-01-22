@@ -6,13 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CpuUsageProgress } from "@/features/metrics/CpuUsageProgress.tsx";
-import { GpuUsageProgress } from "@/features/metrics/GpuUsageProgress.tsx";
+import { DeviceUsageProgress } from "@/features/metrics/DeviceUsageProgress.tsx";
+import { useMetrics } from "@/features/metrics/useMetrics.ts";
 import AddPipelineButton from "@/features/pipelines/AddPipelineButton.tsx";
 import CopyPipelineButton from "@/features/pipelines/CopyPipelineButton.tsx";
 import { useAppSelector } from "@/store/hooks";
 import { selectPipelines } from "@/store/reducers/pipelines";
-import { BookOpen, Code, Sparkles } from "lucide-react";
+import { BookOpen, Code, Cpu, Gpu, Sparkles } from "lucide-react";
 import pipeline0 from "@/assets/pipeline_0.png";
 import pipeline1 from "@/assets/pipeline_1.png";
 import pipeline2 from "@/assets/pipeline_2.png";
@@ -20,8 +20,11 @@ import pipeline3 from "@/assets/pipeline_3.png";
 import pipeline4 from "@/assets/pipeline_4.png";
 import pipeline5 from "@/assets/pipeline_5.png";
 import type { Pipeline } from "@/api/api.generated";
-import { selectHasNPU } from "@/store/reducers/devices.ts";
-import { NpuUsageProgress } from "@/features/metrics/NpuUsageProgress.tsx";
+import {
+  selectDeviceByFamily,
+  selectGpuDevices,
+  selectHasNPU,
+} from "@/store/reducers/devices.ts";
 
 const pipelineImages = [
   pipeline0,
@@ -34,8 +37,27 @@ const pipelineImages = [
 
 const Home = () => {
   const pipelines = useAppSelector(selectPipelines);
+  const { cpu, gpus } = useMetrics();
 
   const hasNpu = useAppSelector(selectHasNPU);
+  const cpuDevice = useAppSelector((state) =>
+    selectDeviceByFamily(state, "CPU"),
+  );
+  const npuDevice = useAppSelector((state) =>
+    selectDeviceByFamily(state, "NPU"),
+  );
+  const gpuDevices = useAppSelector(selectGpuDevices);
+
+  const gpuDeviceMap = new Map(
+    gpuDevices.map((device) => {
+      // handle both single card "GPU" and multiple cards "GPU.0", "GPU.1"
+      const id =
+        device.device_name === "GPU"
+          ? "0"
+          : device.device_name.replace("GPU.", "");
+      return [id, device];
+    }),
+  );
 
   const predefinedPipelines =
     pipelines?.filter((p) => p.source === "PREDEFINED") ?? [];
@@ -149,9 +171,39 @@ const Home = () => {
         </div>
         <div className="w-[25%] border-l p-4 flex flex-col gap-4 bg-[#F9F9F9] dark:bg-[#3c3e42]">
           <h1 className="font-medium text-2xl">Resource utilization</h1>
-          <CpuUsageProgress />
-          <GpuUsageProgress />
-          {hasNpu && <NpuUsageProgress />}
+
+          <DeviceUsageProgress
+            icon={Cpu}
+            deviceLabel="CPU"
+            deviceFullName={cpuDevice?.full_device_name}
+            value={cpu}
+          />
+
+          {gpus.map((gpu) => {
+            const device = gpuDeviceMap.get(gpu.id);
+            const deviceLabel = device?.device_name || `GPU.${gpu.id}`;
+            const deviceFullName = device?.full_device_name || "Unknown GPU";
+
+            return (
+              <DeviceUsageProgress
+                key={gpu.id}
+                icon={Gpu}
+                deviceLabel={deviceLabel}
+                deviceFullName={deviceFullName}
+                value={gpu.usage}
+              />
+            );
+          })}
+
+          {hasNpu && (
+            <DeviceUsageProgress
+              icon={Gpu}
+              deviceLabel="NPU"
+              deviceFullName={npuDevice?.full_device_name}
+              value={0}
+              note="(coming soon)"
+            />
+          )}
 
           <h1 className="font-medium text-2xl mt-4">Learning and support</h1>
 

@@ -1,4 +1,3 @@
-import { useMetrics } from "@/features/metrics/useMetrics";
 import {
   Progress,
   ProgressIndicator,
@@ -6,24 +5,33 @@ import {
   ProgressTrack,
   ProgressValue,
 } from "@/components/ui/progress";
-import { Cpu } from "lucide-react";
-import { useAppSelector } from "@/store/hooks.ts";
-import { selectDeviceByFamily } from "@/store/reducers/devices.ts";
+import type { LucideIcon } from "lucide-react";
 
-export const CpuUsageProgress = () => {
-  const { cpu } = useMetrics();
-  const deviceName = useAppSelector((state) =>
-    selectDeviceByFamily(state, "CPU"),
-  );
+interface DeviceUsageProgressProps {
+  icon: LucideIcon;
+  deviceLabel: string;
+  deviceFullName?: string;
+  value: number;
+  note?: string;
+}
 
+export const DeviceUsageProgress = ({
+  icon: Icon,
+  deviceLabel,
+  deviceFullName,
+  value,
+  note,
+}: DeviceUsageProgressProps) => {
   return (
-    <Progress value={cpu} max={100}>
+    <Progress value={value} max={100}>
       <>
         <div className="flex items-center justify-between">
           <ProgressLabel>
             <span className="flex items-center gap-2">
-              <Cpu className="h-4 w-4 shrink-0" />
-              CPU: {deviceName?.full_device_name}
+              <Icon className="h-4 w-4 shrink-0" />
+              {deviceLabel}
+              {deviceFullName && `: ${deviceFullName}`}
+              {note && ` ${note}`}
             </span>
           </ProgressLabel>
           <ProgressValue>
