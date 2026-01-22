@@ -1,18 +1,20 @@
 import { Slider } from "@/components/ui/slider.tsx";
 
-interface StreamsSliderProps {
+interface NumberSliderProps {
   value: number;
   onChange: (value: number) => void;
   min?: number;
   max?: number;
+  unit?: string;
 }
 
-export const StreamsSlider = ({
+export const NumberSlider = ({
   value,
   onChange,
-  min = 1,
-  max = 64,
-}: StreamsSliderProps) => {
+  min = 0,
+  max = 100,
+  unit,
+}: NumberSliderProps) => {
   return (
     <div className="flex items-center gap-3">
       <span className="text-sm text-muted-foreground min-w-[2ch] text-center">
@@ -44,6 +46,7 @@ export const StreamsSlider = ({
         style={{ textAlign: "center" }}
         disabled={true}
       />
+      {unit && <span className="text-sm text-muted-foreground">{unit}</span>}
     </div>
   );
 };

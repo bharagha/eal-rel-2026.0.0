@@ -14,7 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Plus, X } from "lucide-react";
-import { StreamsSlider } from "@/features/pipeline-tests/StreamsSlider.tsx";
+import { NumberSlider } from "@/components/shared/NumberSlider.tsx";
 import SaveOutputWarning from "@/features/pipeline-tests/SaveOutputWarning.tsx";
 
 interface PipelineSelection {
@@ -225,7 +225,7 @@ const PerformanceTests = () => {
                   <label className="block text-sm font-medium mb-1">
                     Streams
                   </label>
-                  <StreamsSlider
+                  <NumberSlider
                     value={selection.streams}
                     onChange={(val) =>
                       handleStreamsChange(selection.pipelineId, val)

@@ -16,7 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Plus, X } from "lucide-react";
-import { ParticipationSlider } from "@/features/pipeline-tests/ParticipationSlider.tsx";
+import { NumberSlider } from "@/components/shared/NumberSlider.tsx";
 import SaveOutputWarning from "@/features/pipeline-tests/SaveOutputWarning.tsx";
 
 interface PipelineSelection {
@@ -231,13 +231,14 @@ const DensityTests = () => {
                   <label className="block text-sm font-medium mb-1">
                     Participation Rate
                   </label>
-                  <ParticipationSlider
+                  <NumberSlider
                     value={selection.stream_rate}
                     onChange={(val) =>
                       handleStreamRateChange(selection.pipelineId, val)
                     }
                     min={0}
                     max={100}
+                    unit="%"
                   />
                 </div>
               </div>
