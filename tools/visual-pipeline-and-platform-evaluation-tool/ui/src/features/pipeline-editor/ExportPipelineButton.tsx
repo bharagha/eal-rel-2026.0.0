@@ -10,6 +10,7 @@ import type { Edge, Node, Viewport } from "@xyflow/react";
 import { Download, FileJson, Terminal } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 type DownloadPipelineButtonProps = {
   nodes: Node[];
@@ -83,13 +84,10 @@ const ExportPipelineButton = ({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button
-          className="bg-background hover:bg-classic-blue dark:text-energy-blue font-medium dark:hover:text-[#242528] dark:border-energy-blue dark:hover:bg-energy-blue border-2 border-classic-blue text-primary hover:text-white px-3 py-2 transition-colors flex items-center gap-2"
-          title="Export Pipeline"
-        >
-          <Download className="w-5 h-5" />
-          <span>Export</span>
-        </button>
+        <Button variant="outline" title="Export Pipeline">
+          <Download />
+          Export
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-64">
         <div className="space-y-2">

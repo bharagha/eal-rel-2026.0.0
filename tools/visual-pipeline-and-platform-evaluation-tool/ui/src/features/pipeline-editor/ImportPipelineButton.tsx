@@ -20,6 +20,7 @@ import {
 } from "@xyflow/react";
 import { createGraphLayout } from "./utils/graphLayout";
 import { isApiError } from "@/lib/apiUtils";
+import { Button } from "@/components/ui/button";
 
 interface ImportPipelineButtonProps {
   onImport: (
@@ -152,13 +153,10 @@ const ImportPipelineButton = ({ onImport }: ImportPipelineButtonProps) => {
 
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger asChild>
-          <button
-            className="bg-background hover:bg-classic-blue dark:text-energy-blue font-medium dark:hover:text-[#242528] dark:border-energy-blue dark:hover:bg-energy-blue border-2 border-classic-blue text-primary hover:text-white px-3 py-2 transition-colors flex items-center gap-2"
-            title="Import Pipeline"
-          >
-            <Upload className="w-5 h-5" />
-            <span>Import</span>
-          </button>
+          <Button variant="outline" title="Import Pipeline">
+            <Upload />
+            Import
+          </Button>
         </PopoverTrigger>
         <PopoverContent className="w-64">
           <div className="space-y-2">

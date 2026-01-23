@@ -1,4 +1,5 @@
 import { Play } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type RunPipelineButtonProps = {
   onRun: () => void;
@@ -7,15 +8,16 @@ type RunPipelineButtonProps = {
 
 const RunPipelineButton = ({ onRun, isRunning }: RunPipelineButtonProps) => {
   return (
-    <button
+    <Button
       onClick={onRun}
       disabled={isRunning}
-      className="w-[160px] bg-classic-blue dark:text-[#242528] font-medium dark:bg-energy-blue dark:hover:bg-energy-blue-tint-1 hover:bg-classic-blue-hover disabled:bg-gray-400 text-white px-3 py-2 shadow-lg transition-colors flex items-center gap-2"
       title="Run Performance Test"
+      className="w-[160px]"
+      variant="default"
     >
-      <Play className="w-5 h-5" />
-      <span>Run pipeline</span>
-    </button>
+      <Play />
+      Run pipeline
+    </Button>
   );
 };
 

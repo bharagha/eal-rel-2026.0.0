@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { Braces } from "lucide-react";
 import type { Edge, Node, Viewport } from "@xyflow/react";
+import { Button } from "@/components/ui/button";
 
 type StatePreviewButtonProps = {
   nodes: Node[];
@@ -23,9 +24,9 @@ const StatePreviewButton = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg shadow-lg transition-colors">
-          <Braces className="w-5 h-5" />
-        </button>
+        <Button variant="outline" size="icon">
+          <Braces />
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
         <DialogHeader>

@@ -3,6 +3,7 @@ import { useDeletePipelineMutation } from "@/api/api.generated";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { isApiError } from "@/lib/apiUtils";
+import { Button } from "@/components/ui/button";
 
 interface DeletePipelineButtonProps {
   pipelineId: string;
@@ -36,14 +37,10 @@ const DeletePipelineButton = ({
   };
 
   return (
-    <button
-      onClick={handleDelete}
-      disabled={isLoading}
-      className="bg-red-600 dark:bg-[#f88f8f] dark:text-[#242528] dark:hover:bg-red-400 hover:bg-red-700 font-medium disabled:bg-red-300 text-white p-2 flex items-center gap-2 transition-colors"
-    >
-      <Trash2 className="w-5 h-5" />
-      <span>{isLoading ? "Deleting..." : "Delete"}</span>
-    </button>
+    <Button onClick={handleDelete} disabled={isLoading} variant="destructive">
+      <Trash2 />
+      {isLoading ? "Deleting..." : "Delete"}
+    </Button>
   );
 };
 
