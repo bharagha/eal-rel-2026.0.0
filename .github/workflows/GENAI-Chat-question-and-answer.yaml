@@ -383,7 +383,6 @@ jobs:
           pip install poetry
           poetry install --with dev || true
           poetry add --group dev pytest-cov || true
-          source setup.sh llm=TGI embed=TEI
           poetry run pytest tests/unit_tests/ \
             --cov=app \
             --cov=ovms_config \
