@@ -14,7 +14,7 @@ concurrency:
 on:
   pull_request:
     branches:
-      - main
+      - test-chatqna
     paths:
       - 'sample-applications/chat-question-and-answer/**'
 
