@@ -16,13 +16,13 @@ class GStreamerWebRTCManager:
 
     _source_mediamtx = "appsrc name=webrtc_source format=GST_FORMAT_TIME "
     _WebRTCVideoPipeline = (
-        " ! videoconvert ! gvawatermark "
+        " ! videoconvert ! gvawatermark displ-cfg=font-scale=1.0,draw-txt-bg=false "
         " ! x264enc speed-preset=ultrafast name=h264enc"
         " ! video/x-h264,profile=baseline "
         " ! whipclientsink signaller::whip-endpoint="
     )
     _WebRTCVideoPipeline_jpeg = (
-        " ! jpegdec ! videoconvert ! gvawatermark "
+        " ! jpegdec ! videoconvert ! gvawatermark displ-cfg=font-scale=1.0,draw-txt-bg=false "
         " ! x264enc speed-preset=ultrafast name=h264enc "
         " ! video/x-h264,profile=baseline "
         " ! whipclientsink signaller::whip-endpoint="
@@ -30,14 +30,14 @@ class GStreamerWebRTCManager:
 
     # GPU pipeline variants for hardware-accelerated buffers
     _WebRTCVideoPipeline_VAMemory = (
-        " ! videoconvert ! gvawatermark "
+        " ! videoconvert ! gvawatermark displ-cfg=font-scale=1.0,draw-txt-bg=false "
         " ! vah264enc name=h264enc "
         " ! h264parse  "
         " ! whipclientsink signaller::whip-endpoint="
     )
 
     _WebRTCVideoPipeline_jpeg_VAMemory = (
-        " ! vajpegdec ! videoconvert ! gvawatermark "
+        " ! vajpegdec ! videoconvert ! gvawatermark displ-cfg=font-scale=1.0,draw-txt-bg=false "
         " ! vah264enc name=h264enc "
         " ! h264parse  "
         " ! whipclientsink signaller::whip-endpoint="
@@ -160,7 +160,7 @@ class GStreamerWebRTCManager:
             else:
                 video_pipeline = self._WebRTCVideoPipeline
         if overlay is False:
-            video_pipeline = video_pipeline.replace("! gvawatermark ", "")
+            video_pipeline = video_pipeline.replace("! gvawatermark displ-cfg=font-scale=1.0,draw-txt-bg=false ", "")
         elif overlay is True:
             video_pipeline = video_pipeline
         pipeline_launch = " {} {} ".format(s_src, video_pipeline)

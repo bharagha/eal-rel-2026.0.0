@@ -19,10 +19,10 @@ class GStreamerRtspFactory(GstRtspServer.RTSPMediaFactory):
         # ! gvawatermark ! jpegenc name=jpegencoder ! rtpjpegpay name=pay0"
 
     _RtspVideoPipeline_withjpeginput_overlay = " ! jpegdec ! videoconvert  \
-        ! gvawatermark ! jpegenc name=jpegencoder ! rtpjpegpay name=pay0" 
+        ! gvawatermark displ-cfg=font-scale=1.0,draw-txt-bg=false ! jpegenc name=jpegencoder ! rtpjpegpay name=pay0" 
 
     _RtspVideoPipeline = " ! videoconvert  \
-        ! gvawatermark ! jpegenc name=jpegencoder ! rtpjpegpay name=pay0"
+        ! gvawatermark displ-cfg=font-scale=1.0,draw-txt-bg=false ! jpegenc name=jpegencoder ! rtpjpegpay name=pay0"
     
     # GPU pipeline variants for hardware-accelerated buffers
     # _RtspVideoPipeline_GPU_VASurface = " ! vaapipostproc ! vaapijpegenc ! rtpjpegpay name=pay0"
@@ -116,7 +116,7 @@ class GStreamerRtspFactory(GstRtspServer.RTSPMediaFactory):
         else:
             media_pipeline = GStreamerRtspFactory._RtspVideoPipeline
             if overlay is False:
-                media_pipeline = media_pipeline.replace("gvawatermark ! ", "")
+                media_pipeline = media_pipeline.replace("gvawatermark displ-cfg=font-scale=1.0,draw-txt-bg=false ! ", "")
 
         if is_gpu and buffer_type == "VAMemory":
             self._logger.debug("Using GPU pipeline for caps: {} (type: {})".format(caps.to_string(), buffer_type))
