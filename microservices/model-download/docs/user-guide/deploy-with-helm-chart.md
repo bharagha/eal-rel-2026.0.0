@@ -61,7 +61,7 @@ cd edge-ai-libraries/microservices/model-download/chart
 
 ## Common Steps
 
-#### Step 3: Configure the `values.yaml` File
+### Step 3: Configure the `values.yaml` File
 
 Edit the `values.yaml` file located in the chart directory to set the necessary environment variables. Ensure you set the proxy settings as required
 
@@ -78,7 +78,7 @@ Below is a summary of key configuration options available in the `values.yaml` f
 | `service.nodePort`  | Sets the static port (in the 30000–32767 range) | 32000                | Yes      |
 | `env.ENABLED_PLUGINS`| Comma-separated list of plugins to enable (e.g., `huggingface,ollama,ultralytics, openvino and geti`) or `all` to enable all available plugins | `all` | Yes |
 | `image.repository`	| image repository url	| intel/model-download | Yes |
-| `image.tag`	        | latest image tag	    | 1.1.0-rc1             | Yes |
+| `image.tag`	        | latest image tag	    | latest            | Yes |
 
 
 > **Note:** Refer to the chart's `values.yaml` for a full list of configurable parameters.
