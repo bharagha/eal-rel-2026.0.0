@@ -9,6 +9,23 @@ import {
 import { MetricChart } from "@/features/metrics/MetricChart";
 import { GpuSelector } from "@/features/metrics/GpuSelector";
 
+const CHART_MAX_DATA_POINTS = 30;
+
+const getRecentYAxisMax = (
+  values: number[],
+  maxDataPoints: number,
+  minMax: number,
+  headroomFactor = 1.15,
+) => {
+  const recentValues = values.slice(-maxDataPoints).filter(Number.isFinite);
+  if (recentValues.length === 0) return minMax;
+
+  const recentMax = Math.max(...recentValues, 0);
+  if (recentMax <= 0) return minMax;
+
+  return Math.max(recentMax * headroomFactor, minMax);
+};
+
 interface MetricCardProps {
   title: string;
   value: number;
@@ -213,6 +230,36 @@ export const TestProgressIndicator = ({
     memory: point.memory ?? 0,
   }));
 
+  const fpsYAxisMax = getRecentYAxisMax(
+    fpsData.map((point) => point.value),
+    CHART_MAX_DATA_POINTS,
+    1,
+  );
+
+  const cpuTempYAxisMax = getRecentYAxisMax(
+    cpuTempData.map((point) => point.temp),
+    CHART_MAX_DATA_POINTS,
+    1,
+  );
+
+  const cpuFrequencyYAxisMax = getRecentYAxisMax(
+    cpuFrequencyData.map((point) => point.frequency),
+    CHART_MAX_DATA_POINTS,
+    0.1,
+  );
+
+  const gpuPowerYAxisMax = getRecentYAxisMax(
+    gpuPowerData.map((point) => Math.max(point.gpuPower, point.pkgPower)),
+    CHART_MAX_DATA_POINTS,
+    1,
+  );
+
+  const gpuFrequencyYAxisMax = getRecentYAxisMax(
+    gpuFrequencyData.map((point) => point.frequency),
+    CHART_MAX_DATA_POINTS,
+    0.1,
+  );
+
   const engineColors: Record<string, string> = {
     compute: "var(--color-yellow-chart)",
     render: "var(--color-orange-chart)",
@@ -254,10 +301,10 @@ export const TestProgressIndicator = ({
             dataKeys={["value"]}
             colors={["var(--color-magenta-chart)"]}
             unit=" fps"
-            yAxisDomain={[0, Math.max(...fpsData.map((d) => d.value), 60)]}
+            yAxisDomain={[0, fpsYAxisMax]}
             showLegend={false}
             labels={["Frame Rate"]}
-            maxDataPoints={30}
+            maxDataPoints={CHART_MAX_DATA_POINTS}
             isSummary={isSummary}
             forceDark={forceDark}
             useDemoStyles={useDemoStyles}
@@ -271,7 +318,7 @@ export const TestProgressIndicator = ({
             yAxisDomain={[0, 100]}
             showLegend={false}
             labels={["Memory"]}
-            maxDataPoints={30}
+            maxDataPoints={CHART_MAX_DATA_POINTS}
             isSummary={isSummary}
             forceDark={forceDark}
             useDemoStyles={useDemoStyles}
@@ -297,7 +344,7 @@ export const TestProgressIndicator = ({
             yAxisDomain={[0, 100]}
             showLegend={false}
             labels={["CPU Usage"]}
-            maxDataPoints={30}
+            maxDataPoints={CHART_MAX_DATA_POINTS}
             isSummary={isSummary}
             forceDark={forceDark}
             useDemoStyles={useDemoStyles}
@@ -308,10 +355,10 @@ export const TestProgressIndicator = ({
             dataKeys={["temp"]}
             colors={["var(--color-green-chart)"]}
             unit="°C"
-            yAxisDomain={[0, Math.max(...cpuTempData.map((d) => d.temp), 100)]}
+            yAxisDomain={[0, cpuTempYAxisMax]}
             showLegend={false}
             labels={["Temperature"]}
-            maxDataPoints={30}
+            maxDataPoints={CHART_MAX_DATA_POINTS}
             isSummary={isSummary}
             forceDark={forceDark}
             useDemoStyles={useDemoStyles}
@@ -322,13 +369,10 @@ export const TestProgressIndicator = ({
             dataKeys={["frequency"]}
             colors={["var(--color-green-chart)"]}
             unit=" GHz"
-            yAxisDomain={[
-              0,
-              Math.max(...cpuFrequencyData.map((d) => d.frequency), 5),
-            ]}
+            yAxisDomain={[0, cpuFrequencyYAxisMax]}
             showLegend={false}
             labels={["Frequency"]}
-            maxDataPoints={30}
+            maxDataPoints={CHART_MAX_DATA_POINTS}
             isSummary={isSummary}
             forceDark={forceDark}
             useDemoStyles={useDemoStyles}
@@ -408,19 +452,11 @@ export const TestProgressIndicator = ({
                     "var(--color-yellow-chart)",
                   ]}
                   unit=" W"
-                  yAxisDomain={[
-                    0,
-                    Math.max(
-                      ...gpuPowerData.map((d) =>
-                        Math.max(d.gpuPower, d.pkgPower),
-                      ),
-                      50,
-                    ),
-                  ]}
+                  yAxisDomain={[0, gpuPowerYAxisMax]}
                   showLegend={true}
                   className={`${useDemoStyles ? "!bg-transparent !border-0" : ""} !shadow-none !p-0`}
                   labels={["GPU Power", "Package Power"]}
-                  maxDataPoints={30}
+                  maxDataPoints={CHART_MAX_DATA_POINTS}
                   isSummary={isSummary}
                   hideSummaryBorder={true}
                   forceDark={forceDark}
@@ -479,14 +515,11 @@ export const TestProgressIndicator = ({
                   dataKeys={["frequency"]}
                   colors={["var(--color-yellow-chart)"]}
                   unit=" GHz"
-                  yAxisDomain={[
-                    0,
-                    Math.max(...gpuFrequencyData.map((d) => d.frequency), 3),
-                  ]}
+                  yAxisDomain={[0, gpuFrequencyYAxisMax]}
                   showLegend={false}
                   labels={["Frequency"]}
                   className={`${useDemoStyles ? "!bg-transparent !border-0" : ""} !shadow-none !p-0`}
-                  maxDataPoints={30}
+                  maxDataPoints={CHART_MAX_DATA_POINTS}
                   isSummary={isSummary}
                   hideSummaryBorder={true}
                   forceDark={forceDark}
@@ -549,7 +582,7 @@ export const TestProgressIndicator = ({
                   labels={availableEngines.map((e) => engineLabels[e])}
                   wrapLegend={true}
                   className={`${useDemoStyles ? "!bg-transparent !border-0" : ""} !shadow-none !p-0`}
-                  maxDataPoints={30}
+                  maxDataPoints={CHART_MAX_DATA_POINTS}
                   isSummary={isSummary}
                   hideSummaryBorder={true}
                   forceDark={forceDark}
