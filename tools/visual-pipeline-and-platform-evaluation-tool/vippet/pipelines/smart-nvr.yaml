@@ -17,7 +17,7 @@ variants:
       queue !
       avdec_h264 !
       video/x-raw !
-      gvafpscounter starting-frame=100 !
+      gvafpscounter starting-frame=300 !
       gvadetect
         model=/models/output/pipeline-zoo-models/yolov5s-416_INT8/FP16-INT8/yolov5s.xml
         model-proc=/models/output/pipeline-zoo-models/yolov5s-416_INT8/yolo-v5.json
@@ -26,6 +26,7 @@ variants:
         device=CPU
         batch-size=0
         inference-interval=3
+        inference-region=full-frame
         nireq=0 !
       queue !
       gvatrack tracking-type=short-term-imageless !
@@ -46,8 +47,8 @@ variants:
       gvametaconvert format=json json-indent=4 !
       gvametapublish method=file file-path=/dev/null !
       videoscale !
-      video/x-raw,width=320,height=240 !
-      fakesink name=default_output_sink
+      video/x-raw,width=960,height=540 !
+      fakesink name=default_output_sink async=false sync=false
   - name: GPU
     pipeline_description: >-
       filesrc location=/videos/input/people.mp4 !
@@ -59,7 +60,7 @@ variants:
       queue !
       vah264dec !
       video/x-raw(memory:VAMemory) !
-      gvafpscounter starting-frame=100 !
+      gvafpscounter starting-frame=300 !
       gvadetect
         model=/models/output/pipeline-zoo-models/yolov5s-416_INT8/FP16-INT8/yolov5s.xml
         model-proc=/models/output/pipeline-zoo-models/yolov5s-416_INT8/yolo-v5.json
@@ -68,6 +69,7 @@ variants:
         device=GPU
         batch-size=0
         inference-interval=3
+        inference-region=full-frame
         nireq=0 !
       queue !
       gvatrack tracking-type=short-term-imageless !
@@ -88,8 +90,8 @@ variants:
       gvametaconvert format=json json-indent=4 !
       gvametapublish method=file file-path=/dev/null !
       vapostproc !
-      video/x-raw(memory:VAMemory),width=320,height=240 !
-      fakesink name=default_output_sink
+      video/x-raw(memory:VAMemory),width=960,height=540 !
+      fakesink name=default_output_sink async=false sync=false
   - name: NPU
     pipeline_description: >-
       filesrc location=/videos/input/people.mp4 !
@@ -102,15 +104,16 @@ variants:
       vah264dec !
       vapostproc !
       video/x-raw\(memory:VAMemory\) !
-      gvafpscounter starting-frame=100 !
+      gvafpscounter starting-frame=300 !
       gvadetect
         model=/models/output/pipeline-zoo-models/yolov5s-416_INT8/FP16-INT8/yolov5s.xml
         model-proc=/models/output/pipeline-zoo-models/yolov5s-416_INT8/yolo-v5.json
         model-instance-id=detect0
-        pre-process-backend=va
+        pre-process-backend=opencv
         device=NPU
         batch-size=0
         inference-interval=3
+        inference-region=full-frame
         nireq=0 !
       queue !
       gvatrack tracking-type=short-term-imageless !
@@ -119,7 +122,7 @@ variants:
         model=/models/output/pipeline-zoo-models/resnet-50-tf_INT8/resnet-50-tf_i8.xml
         model-proc=/models/output/pipeline-zoo-models/resnet-50-tf_INT8/resnet-50-tf_i8.json
         model-instance-id=classify0
-        pre-process-backend=va
+        pre-process-backend=opencv
         device=NPU
         batch-size=0
         inference-interval=3
@@ -131,8 +134,8 @@ variants:
       gvametaconvert format=json json-indent=4 !
       gvametapublish method=file file-path=/dev/null !
       vapostproc !
-      video/x-raw(memory:VAMemory),width=320,height=240 !
-      fakesink name=default_output_sink
+      video/x-raw(memory:VAMemory),width=960,height=540 !
+      fakesink name=default_output_sink async=false sync=false
   - name: GPU_NPU
     pipeline_description: >-
       filesrc location=/videos/input/people.mp4 !
@@ -144,7 +147,7 @@ variants:
       queue !
       vah264dec !
       video/x-raw(memory:VAMemory) !
-      gvafpscounter starting-frame=100 !
+      gvafpscounter starting-frame=300 !
       gvadetect
         model=/models/output/pipeline-zoo-models/yolov5s-416_INT8/FP16-INT8/yolov5s.xml
         model-proc=/models/output/pipeline-zoo-models/yolov5s-416_INT8/yolo-v5.json
@@ -153,6 +156,7 @@ variants:
         device=GPU
         batch-size=0
         inference-interval=3
+        inference-region=full-frame
         nireq=0 !
       queue !
       gvatrack tracking-type=short-term-imageless !
@@ -161,11 +165,11 @@ variants:
         model=/models/output/pipeline-zoo-models/resnet-50-tf_INT8/resnet-50-tf_i8.xml
         model-proc=/models/output/pipeline-zoo-models/resnet-50-tf_INT8/resnet-50-tf_i8.json
         model-instance-id=classify0-gpu-npu
-        pre-process-backend=va
+        pre-process-backend=opencv
         device=NPU
-        batch-size=0
+        batch-size=4
         inference-interval=3
-        nireq=0
+        nireq=2
         inference-region=roi-list
         reclassify-interval=1 !
       queue !
@@ -173,5 +177,5 @@ variants:
       gvametaconvert format=json json-indent=4 !
       gvametapublish method=file file-path=/dev/null !
       vapostproc !
-      video/x-raw(memory:VAMemory),width=320,height=240 !
-      fakesink name=default_output_sink
+      video/x-raw(memory:VAMemory),width=960,height=540 !
+      fakesink name=default_output_sink async=false sync=false

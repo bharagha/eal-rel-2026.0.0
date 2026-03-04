@@ -111,8 +111,8 @@ const nodeTypeToTag: Record<string, string> = {
   valve: "Valve",
 
   // Caps
-  "video/x-raw": "Caps",
-  "video/x-raw(memory:VAMemory)": "Caps",
+  "video/x-raw": "Resize",
+  "video/x-raw(memory:VAMemory)": "Resize",
 };
 
 interface PipelineSelection {
@@ -196,7 +196,7 @@ const DemoMode = () => {
   const [pipelineSelections, setPipelineSelections] = useState<
     PipelineSelection[]
   >([]);
-  const [fpsFloor, setFpsFloor] = useState<number>(30);
+  const [fpsFloor, setFpsFloor] = useState<number>(5);
   const [densityJobId, setDensityJobId] = useState<string | null>(null);
   const handleStreamRateChange = useStreamRateChange(setPipelineSelections);
   const [performanceJobId, setPerformanceJobId] = useState<string | null>(null);
@@ -845,7 +845,7 @@ const DemoMode = () => {
 
       pipelineSelections.forEach((selection) => {
         if (next[selection.pipelineId] == null) {
-          next[selection.pipelineId] = 1;
+          next[selection.pipelineId] = 16;
           changed = true;
         }
       });

@@ -10,7 +10,7 @@ thumbnail: images/license-plate-recognition.png
 variants:
   - name: CPU
     pipeline_description: >-
-      filesrc location=/videos/input/license-plate-detection.mp4 !
+      filesrc location=/videos/input/traffic-flow-in-the-highway-2103099.mp4 !
       decodebin3 !
       gvafpscounter starting-frame=500 !
       gvadetect
@@ -20,6 +20,7 @@ variants:
         pre-process-backend=opencv
         batch-size=0
         inference-interval=3
+        inference-region=full-frame
         nireq=0 !
       queue !
       gvatrack tracking-type=short-term-imageless !
@@ -41,7 +42,7 @@ variants:
       fakesink name=default_output_sink
   - name: GPU
     pipeline_description: >-
-      filesrc location=/videos/input/license-plate-detection.mp4 !
+      filesrc location=/videos/input/traffic-flow-in-the-highway-2103099.mp4 !
       decodebin3 !
       gvafpscounter starting-frame=500 !
       gvadetect
@@ -51,6 +52,7 @@ variants:
         device=GPU
         batch-size=0
         inference-interval=3
+        inference-region=full-frame
         nireq=0 !
       queue !
       gvatrack tracking-type=short-term-imageless !
@@ -72,7 +74,7 @@ variants:
       fakesink name=default_output_sink
   - name: GPU_NPU
     pipeline_description: >-
-      filesrc location=/videos/input/license-plate-detection.mp4 !
+      filesrc location=/videos/input/traffic-flow-in-the-highway-2103099.mp4 !
       decodebin3 !
       gvafpscounter starting-frame=500 !
       gvadetect
@@ -82,18 +84,20 @@ variants:
         device=GPU
         batch-size=0
         inference-interval=3
+        inference-region=full-frame
         nireq=0 !
       queue !
       gvatrack tracking-type=short-term-imageless !
       queue !
+      vapostproc !
       gvaclassify
         model=/models/output/public/ch_PP-OCRv4_rec_infer/FP32/ch_PP-OCRv4_rec_infer.xml
         model-instance-id=classify0-gpu-npu
-        pre-process-backend=va
+        pre-process-backend=opencv
         device=NPU
-        batch-size=0
+        batch-size=4
         inference-interval=3
-        nireq=0
+        nireq=2
         inference-region=roi-list
         reclassify-interval=1 !
       queue !
