@@ -65,6 +65,8 @@ COPY ./config.json /app/
 COPY ./config/kapacitor*.conf /app/config/
 COPY ./tick_scripts /app/temperature_classifier/tick_scripts/
 COPY ./udfs /app/temperature_classifier/udfs/
+COPY ./docker/run.sh /app/
+COPY ./docker/detect-cores.sh /app/
 
 # Optionally download copyleft sources if requested
 ARG COPYLEFT_SOURCES=false
@@ -110,4 +112,4 @@ USER $TIMESERIES_USER_NAME
 # Simple healthcheck to verify container is running
 HEALTHCHECK --interval=5m CMD exit 0
 
-ENTRYPOINT ["python3", "main.py"]
+ENTRYPOINT ["./run.sh"]
