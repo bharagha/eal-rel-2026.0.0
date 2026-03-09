@@ -19,5 +19,4 @@ esac
 echo "Using core pinning: ${taskset_cmds[@]}"
 "${taskset_cmds[@]}" python3 main.py
 
-wait
 

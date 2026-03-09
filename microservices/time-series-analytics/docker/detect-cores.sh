@@ -6,7 +6,7 @@
 #
 
 # Detect core types with multi-tier redundancy:
-# Confirm Multi-Socker (Xeon, assume all P-Cores across all sockets)
+# Confirm Multi-Socket (Xeon, assume all P-Cores across all sockets)
 # Use CPUID to determine Intel Core vs Intel Atom (Guarantee P-Cores)
 # Opportunistically check sysfs for core/atom/lowpower assignments (Guarantee P-Cores)
 # Fallback to L1d cache size drop detection and topology (Guarantee LP-E Cores)
@@ -78,7 +78,7 @@ remove_from_remaining() {
     remaining_core_ids=("${new_remaining[@]}")
 }
 
-# Check if system is multi-socket (Xeon))
+# Check if system is multi-socket (Xeon)
 check_xeon() {
     local socket_count=$(grep "physical id" /proc/cpuinfo 2>/dev/null | sort | uniq | wc -l)
     
@@ -244,7 +244,7 @@ check_lscpu() {
     [[ ${#lscpu_assigned[@]} -gt 0 ]]
 }
 
-# Use sysfss validation for guaranteed assignments if available
+# Use sysfs validation for guaranteed assignments if available
 check_sysfs() {
     if [[ ${#remaining_core_ids[@]} -eq 0 ]]; then
         debug_print "DEBUG: No cores remaining for sysfs validation"
