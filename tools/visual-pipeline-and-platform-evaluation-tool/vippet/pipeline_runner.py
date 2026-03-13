@@ -481,11 +481,11 @@ class PipelineRunner:
                 for line in process_stderr
             ]
 
-            # Log errors if exit code is non-zero
-            if exit_code != 0:
-                stdout_str = "\n".join(stdout_lines)
-                stderr_str = "\n".join(stderr_lines)
+            stdout_str = "\n".join(stdout_lines)
+            stderr_str = "\n".join(stderr_lines)
 
+            # Log the final results and raise error if exit code is non-zero without cancellation
+            if exit_code != 0:
                 self.logger.error("Pipeline failed with exit_code=%s", exit_code)
                 self.logger.error("STDOUT:\n%s", stdout_str)
                 self.logger.error("STDERR:\n%s", stderr_str)
@@ -494,6 +494,12 @@ class PipelineRunner:
                     raise RuntimeError(
                         f"Pipeline execution failed: {stderr_str.strip()}"
                     )
+
+            # Log the output if the pipeline succeeded or was cancelled (non-zero exit code due to cancellation is not treated as an error)
+            if exit_code == 0 or self.is_cancelled():
+                self.logger.info("Output from pipeline execution (exit_code=%s):", exit_code)
+                self.logger.info("STDOUT:\n%s", stdout_str)
+                self.logger.info("STDERR:\n%s", stderr_str)
 
             return PipelineResult(
                 total_fps=total_fps,
