@@ -866,7 +866,7 @@ const DemoMode = () => {
 
       pipelineSelections.forEach((selection) => {
         if (next[selection.pipelineId] == null) {
-          next[selection.pipelineId] = 16;
+          next[selection.pipelineId] = 10;
           changed = true;
         }
       });

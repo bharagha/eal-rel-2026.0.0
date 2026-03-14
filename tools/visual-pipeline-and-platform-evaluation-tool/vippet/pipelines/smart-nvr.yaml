@@ -111,10 +111,10 @@ variants:
         model-instance-id=detect0
         pre-process-backend=opencv
         device=NPU
-        batch-size=0
+        batch-size=4
         inference-interval=3
         inference-region=full-frame
-        nireq=0 !
+        nireq=2 !
       queue !
       gvatrack tracking-type=short-term-imageless !
       queue !
@@ -124,9 +124,9 @@ variants:
         model-instance-id=classify0
         pre-process-backend=opencv
         device=NPU
-        batch-size=0
+        batch-size=16
         inference-interval=3
-        nireq=0
+        nireq=2
         inference-region=roi-list
         reclassify-interval=1 !
       queue !
@@ -167,7 +167,7 @@ variants:
         model-instance-id=classify0-gpu-npu
         pre-process-backend=opencv
         device=NPU
-        batch-size=4
+        batch-size=16
         inference-interval=3
         nireq=2
         inference-region=roi-list
