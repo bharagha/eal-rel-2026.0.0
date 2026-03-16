@@ -21,7 +21,7 @@ variants:
         batch-size=0
         inference-interval=3
         inference-region=full-frame
-        nireq=0 !
+        nireq=2 !
       queue !
       gvatrack tracking-type=short-term-imageless !
       queue !
@@ -32,7 +32,7 @@ variants:
         pre-process-backend=opencv
         batch-size=0
         inference-interval=3
-        nireq=0
+        nireq=2
         inference-region=roi-list
         reclassify-interval=1 !
       queue !
