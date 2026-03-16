@@ -167,7 +167,7 @@ variants:
         model-instance-id=classify0-gpu-npu
         pre-process-backend=opencv
         device=NPU
-        batch-size=4
+        batch-size=16
         inference-interval=3
         nireq=2
         inference-region=roi-list
