@@ -7,7 +7,7 @@ Below, you'll find links to detailed documentation to help you get started, conf
 ## Documentation
 
 - **Overview**
-  - [Overview](docs/user-guide/Overview.md): A high-level introduction to the microservice.
+  - [Overview](docs/user-guide/index.md): A high-level introduction to the microservice.
 
 - **Getting Started**
   - [Get Started](docs/user-guide/get-started.md): Step-by-step guide to getting started with the microservice.
