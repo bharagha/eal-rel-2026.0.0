@@ -230,7 +230,6 @@ done
 - Reduce input resolution and stream count.
 - Check CPU, memory, and accelerator utilization.
 
-
 ## Related guides
 
 - [License Plate Recognition pipeline guide](./license-plate-recognition-pipeline.md)

@@ -18,7 +18,6 @@ as well as multiple pipelines running concurrently.
 ![LPR pipeline](./_assets/lpr-pipeline.png)
 *Figure 1: License Plate Recognition pipeline in ViPPET*
 
-
 This use case mirrors a common smart city workload and can be reproduced in ViPPET to compare Intel® platforms for
 license plate analytics.
 
