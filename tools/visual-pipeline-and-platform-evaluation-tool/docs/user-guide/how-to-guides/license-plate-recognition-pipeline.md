@@ -11,34 +11,18 @@ Unlike traditional LPR solutions that require expensive proprietary hardware, Vi
 architecture leverages GStreamer video processing and OpenVINO™ optimized inference to deliver
 superior performance on standard Intel® computing platforms.
 
+
+## ViPPET's Pipeline Architecture
+
 ![LPR pipeline](../_assets/lpr-pipeline.png)
 *Figure 1: License Plate Recognition pipeline in ViPPET*
 
-## ViPPET's Advanced Pipeline Architecture
-
-### The Simple Video Structurization (D-T-C) Pipeline
-
-ViPPET's LPR solution is built on the proven D-T-C (**Detect-Track-Classify**) methodology:
-
-```yaml
-name: License Plate Recognition
-definition: >
-  The Simple Video Structurization (D-T-C) pipeline is a versatile, use case-agnostic solution that supports
-  license plate recognition, vehicle detection with attribute classification, and other object detection and
-  classification tasks, adaptable based on the selected model.
-tags:
-  - Smart Cities
-  - Transportation
-```
 
 This architecture provides:
 
 - **Modular Design**: Each component can be optimized independently.
 - **Hardware Flexibility**: Seamless scaling across CPU, GPU, and NPU.
 - **Real-time Processing**: GStreamer-based pipeline for low-latency inference.
-- **Production Ready**: Battle-tested components for enterprise deployment.
-
-
 
 ## Pipeline Component Deep Dive
 
