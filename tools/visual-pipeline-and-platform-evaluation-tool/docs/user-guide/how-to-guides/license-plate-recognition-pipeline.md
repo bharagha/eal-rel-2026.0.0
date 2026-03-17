@@ -1,4 +1,4 @@
-# License Plate Recognition with ViPPET 
+# License Plate Recognition with ViPPET
 
 License Plate Recognition (LPR) systems have evolved from specialized hardware solutions to
 flexible, software-defined pipelines that can adapt to various deployment scenarios.
@@ -11,12 +11,10 @@ Unlike traditional LPR solutions that require expensive proprietary hardware, Vi
 architecture leverages GStreamer video processing and OpenVINO™ optimized inference to deliver
 superior performance on standard Intel® computing platforms.
 
-
 ## ViPPET's Pipeline Architecture
 
 ![LPR pipeline](../_assets/lpr-pipeline.png)
 *Figure 1: License Plate Recognition pipeline in ViPPET*
-
 
 This architecture provides:
 
@@ -26,85 +24,37 @@ This architecture provides:
 
 ## Pipeline Component Deep Dive
 
-### 1) Video Ingestion and Decoding
+In ViPPET UI, this LPR pipeline is represented by the following components:
 
-```text
-filesrc location=/videos/input/license-plate-detection.mp4 !
-decodebin3 !
-```
+### 1) Input
 
-- Hardware-accelerated decoding using Intel® Quick Sync Video.
-- Multi-format support (H.264, H.265, VP9).
-- Adaptive bitrate handling for network streams.
+- Defines the input source for the pipeline (file or stream in other scenarios).
+- Decodes raw video frames before AI processing starts.
+- Supports efficient ingest on Intel® platforms.
 
-### 2) Performance Monitoring
+### 2) Object Detection
 
-```text
-gvafpscounter starting-frame=500 !
-```
+- Detects license plate regions in each frame.
+- Supports device selection across CPU, GPU, and NPU.
+- Uses interval and batching parameters for performance tuning.
 
-- Real-time FPS tracking with configurable start frame.
-- Latency measurement for end-to-end pipeline analysis.
-- Resource utilization monitoring integrated with ViPPET dashboard.
+### 3) Tracking
 
-### 3) Object Detection
+- Maintains object identity across consecutive frames.
+- Reduces flicker and duplicate detections for the same plate.
+- Helps stabilize ROI handoff to downstream classification.
 
-```text
-gvadetect
-  model=/models/output/public/yolov8_license_plate_detector/FP32/yolov8_license_plate_detector.xml
-  model-instance-id=detect0
-  device=CPU/GPU/NPU
-  pre-process-backend=opencv/va-surface-sharing
-  batch-size=0
-  inference-interval=3
-  nireq=0 !
-```
+### 4) Image Classification
 
-#### Optimization Parameters
+- Performs OCR on detected plate regions.
+- Uses ROI-based inference to focus computation on relevant areas.
+- Supports reclassification control for stable text recognition.
 
-- `inference-interval=3`: Process every 3rd frame for efficiency.
-- `batch-size=0`: Dynamic batching based on available resources.
-- `nireq=0`: Automatic inference request optimization.
+### 5) Output
 
-### 4) Object Tracking
-
-```text
-gvatrack tracking-type=short-term-imageless !
-```
-
-- Short-term tracking optimized for license plate scenarios.
-- Imageless tracking for reduced memory footprint.
-- ID consistency across frame sequences.
-
-### 5) Classification and OCR
-
-```text
-gvaclassify
-  model=/models/output/public/ch_PP-OCRv4_rec_infer/FP32/ch_PP-OCRv4_rec_infer.xml
-  model-instance-id=classify0
-  device=CPU/GPU/NPU
-  inference-region=roi-list
-  reclassify-interval=1 !
-```
-
-#### Smart Classification Features
-
-- ROI-based inference for computational efficiency.
-- Adaptive reclassification based on tracking confidence.
-- Multi-device deployment for load balancing.
-
-### 6) Metadata Processing
-
-```text
-gvawatermark !
-gvametaconvert format=json json-indent=4 !
-gvametapublish method=file file-path=/dev/null !
-```
-
-- Visual annotations with bounding boxes and text overlays.
-- Structured JSON output for downstream processing.
-- Flexible publishing to files, databases, or message queues.
-
+- Visualizes detections on video frames.
+- Converts metadata to structured JSON format.
+- Publishes results to selected output targets.
 
 ## Conclusion
 
@@ -120,11 +70,6 @@ The Simple Video Structurization (D-T-C) architecture provides:
 - Production-Ready Performance: GStreamer-based pipeline for enterprise reliability.
 - Cost-Effective Scaling: Leverage standard Intel® hardware instead of specialized equipment.
 - Future-Proof Architecture: Seamless integration with emerging Intel® technologies.
-
-### Business Impact
-
-- Faster Time-to-Market: Pre-built pipelines accelerate development cycles.
-- Operational Excellence: Comprehensive monitoring and automated optimization.
 
 ## LPR Test Views in ViPPET
 
