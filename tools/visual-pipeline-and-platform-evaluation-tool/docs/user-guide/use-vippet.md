@@ -13,7 +13,11 @@ to demonstrating running pipelines on both CPU and GPU to compare performance.
 The [performance testing article](./how-to-guides/performance-testing.md) covers performance testing of single pipelines
 as well as multiple pipelines running concurrently.
 
-## Example: Real-Time License Plate Recognition (ALPR)
+## Example: Real-Time License Plate Recognition (LPR)
+
+![LPR pipeline](./_assets/lpr-pipeline.png)
+*Figure 1: License Plate Recognition pipeline in ViPPET*
+
 
 This use case mirrors a common smart city workload and can be reproduced in ViPPET to compare Intel® platforms for
 license plate analytics.
@@ -39,3 +43,6 @@ latency, utilization, and sustainable stream density.
 ./how-to-guides/density-testing.md
 ./how-to-guides/license-plate-recognition-pipeline.md
 ./how-to-guides/license-plate-recognition-api.md
+
+:::
+hide_directive-->
