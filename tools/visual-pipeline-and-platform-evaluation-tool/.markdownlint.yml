@@ -11,6 +11,7 @@ MD010:
 MD013:
   line_length: 120  # Max line length checking.
   code_blocks: false
+  tables: false
 MD024:
   # Duplication is allowed for headings with different parents
   siblings_only: true
