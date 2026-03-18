@@ -34,10 +34,10 @@ jobs:
         git submodule update --init --recursive libraries/dlstreamer
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 #3.11.1
+      uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd #4.0.0
 
     - name: Log in to GitHub Container Registry
-      uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef #3.6.0
+      uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 #4.0.0
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
@@ -308,7 +308,7 @@ jobs:
         fetch-depth: 0
 
     - name: Check license headers
-      uses: open-edge-platform/dlstreamer/.github/actions/common/license-namespace-checker@6d50b990891fdbe14b7fe42e3d482cabf67ae815
+      uses: open-edge-platform/dlstreamer/.github/actions/common/license-namespace-checker@4e561ee95372baa5a7c17b4cdf79f3844802cc8f
       with:
         name: 'DLSPS_license-check-report'
         path: './microservices/dlstreamer-pipeline-server'
@@ -420,7 +420,7 @@ jobs:
           persist-credentials: false
 
       - name: Run pylint
-        uses: open-edge-platform/dlstreamer/.github/actions/common/pylint@76c0a55ba0214c1dadbf989d4b0f395e85361bb0
+        uses: open-edge-platform/dlstreamer/.github/actions/common/pylint@4e561ee95372baa5a7c17b4cdf79f3844802cc8f
         with:
           path: ./microservices/dlstreamer-pipeline-server
           output-file: pylint-report.txt
@@ -443,7 +443,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run shellcheck
-        uses: open-edge-platform/dlstreamer/.github/actions/common/shellcheck@76c0a55ba0214c1dadbf989d4b0f395e85361bb0
+        uses: open-edge-platform/dlstreamer/.github/actions/common/shellcheck@4e561ee95372baa5a7c17b4cdf79f3844802cc8f
         with:
           path: ./microservices/dlstreamer-pipeline-server
           output-file: shellcheck-report.txt
@@ -465,7 +465,7 @@ jobs:
           persist-credentials: false
 
       - name: Run yamlint
-        uses: open-edge-platform/dlstreamer/.github/actions/common/yamllint@76c0a55ba0214c1dadbf989d4b0f395e85361bb0
+        uses: open-edge-platform/dlstreamer/.github/actions/common/yamllint@4e561ee95372baa5a7c17b4cdf79f3844802cc8f
         with:
           path: ./microservices/dlstreamer-pipeline-server
           output-file: yamllint-report.txt
