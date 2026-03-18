@@ -437,8 +437,21 @@ class PipelineRunner:
                     )
 
             # Capture remaining output after process ends
+            # Ensure we fully drain any remaining stdout/stderr from the pipes
+            # before parsing metrics to avoid losing final FPS lines printed
+            # right at shutdown.
+            try:
+                remaining_stdout, remaining_stderr = process.communicate()
+            except Exception:
+                remaining_stdout, remaining_stderr = (b"", b"")
+
+            if remaining_stdout:
+                process_output.append(remaining_stdout)
+            if remaining_stderr:
+                process_stderr.append(remaining_stderr)
+
             if exit_code is None:
-                exit_code = process.wait()
+                exit_code = process.returncode
 
             # ================================================================
             # POST-RUN: Parse all collected stdout lines to extract FPS metrics.
