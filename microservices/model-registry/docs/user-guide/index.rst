@@ -1,6 +1,8 @@
 Model Registry
 ==============
 
+.. note:: Model Registry will be deprecated soon and replaced by Model Download.
+
 The Model Registry microservice provides a centralized repository that facilitates the
 management of AI models.
 
