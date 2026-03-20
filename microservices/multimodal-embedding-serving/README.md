@@ -11,7 +11,7 @@ The microservice is optimized for performance and scalability, supporting batch 
 
 - **Getting Started**
   - [Get Started](docs/user-guide/get-started.md): Step-by-step guide to getting started with the microservice.
-    - [System Requirements](docs/user-guide/system-requirements.md): Hardware and software requirements for running the microservice.
+  - [System Requirements](docs/user-guide/system-requirements.md): Hardware and software requirements for running the microservice.
 
 - **Usage**
   - [SDK Usage](docs/user-guide/sdk-usage.md): Complete guide for using the service as a Python SDK.
